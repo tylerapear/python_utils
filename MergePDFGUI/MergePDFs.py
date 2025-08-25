@@ -16,19 +16,27 @@ def run_conversion(input_folder, output_folder):
 
     home_dir = os.path.expanduser("~")
     temp_dir = os.path.join(home_dir, "temp_dir")
+    temp_word_dir = os.path.join(home_dir, "temp_word_dir")
     if os.path.exists(temp_dir):
         shutil.rmtree(temp_dir)
     os.makedirs(temp_dir)
+    if os.path.exists(temp_word_dir):
+        shutil.rmtree(temp_word_dir)
+    os.makedirs(temp_word_dir)
 
     word_files = [f for f in os.listdir(input_folder) if f.lower().endswith(".docx")]
     total_files = len(word_files)
 
     for i, file in enumerate(word_files, start=1):
       if file.lower().endswith(".docx"):
-          word_path = os.path.join(input_folder, file)
+          
+          original_src = os.path.join(input_folder, file)
+          temp_dst = os.path.join(temp_word_dir, file)
+          shutil.copy2(original_src, temp_dst)
+
           pdf_path = os.path.join(temp_dir, file.replace(".docx", ".pdf"))
           try:
-              convert(word_path, pdf_path)
+              convert(temp_dst, pdf_path)
           except Exception as e:
               messagebox.showerror("Error", f"Failed to convert {file}: {e}")
               continue
@@ -44,6 +52,9 @@ def run_conversion(input_folder, output_folder):
             merger.append(os.path.join(temp_dir, file))
     merger.write(os.path.join(output_folder, "CombinedPDF.pdf"))
     merger.close()
+
+    shutil.rmtree(temp_word_dir)
+    shutil.rmtree(temp_dir)
 
     running = False  # stops animation
     status_label.config(text="Done!")
