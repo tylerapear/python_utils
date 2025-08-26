@@ -3,12 +3,24 @@ import shutil
 import subprocess
 import platform
 import threading
+import traceback
+import win32com.client
 from tkinter import Tk, Label, Button, filedialog, messagebox, StringVar, Frame
 from docx2pdf import convert
 from PyPDF2 import PdfMerger
 
 dot_count = 0
 running = False
+
+def unblock_file(filepath):
+  if os.name == 'nt':
+    try:
+      zone_file = filepath + ":Zone.Identifier"
+      if os.path.exists(zone_file):
+        os.remove(zone_file)
+    except Exception as e:
+      print(f"Failed to unblock {filepath}: {e}")
+    
 
 def run_conversion(input_folder, output_folder):
     global running
@@ -30,13 +42,25 @@ def run_conversion(input_folder, output_folder):
     for i, file in enumerate(word_files, start=1):
       if file.lower().endswith(".docx"):
           
-          original_src = os.path.join(input_folder, file)
+          unblock_file(os.path.join(input_folder, file))
+          
+          original_src = os.path.abspath(os.path.join(input_folder, file))
           temp_dst = os.path.join(temp_word_dir, file)
           shutil.copy2(original_src, temp_dst)
 
           pdf_path = os.path.join(temp_dir, file.replace(".docx", ".pdf"))
           try:
-              convert(temp_dst, pdf_path)
+            word_app = win32com.client.Dispatch("Word.Application")
+            print("opening")
+            doc = word_app.Documents.Open(original_src)
+            print('opened')
+            try:
+              doc.ExportAsFixedFormat(pdf_path, 17)
+            except Exception as e:
+              print(f"Word export failed for {file}")
+              print(e)
+              traceback.print_exc()
+              raise
           except Exception as e:
               messagebox.showerror("Error", f"Failed to convert {file}: {e}")
               continue
