@@ -5,6 +5,7 @@ from PyPDF2 import PdfMerger
 
 dot_count = 0
 running = False
+output_file_name = ""
 
 def run_conversion(input_folder, output_folder):
     
@@ -128,7 +129,7 @@ def select_output_folder():
         output_folder_var.set(folder)
 
 def show_done_message(output_folder):
-    if messagebox.askyesno("Done", f"All Microsoft Word files have been converted to PDF.\n\nFile '{output_file_var.get().strip()}.pdf Created.'\n\nOpen file location?"):
+    if messagebox.askyesno("Done", f"All Microsoft Word files have been combined into a PDF.\n\nFile '{output_file_name}.pdf Created.'\n\nOpen file location?"):
         open_folder(output_folder)
 
 def open_folder(path):
@@ -149,11 +150,23 @@ def convert_files():
     global running
     input_folder = input_folder_var.get()
     output_folder = output_folder_var.get()
+    global output_file_name
+    output_file_name = output_file_var.get().strip()
 
     home_dir = os.path.expanduser("~")
     temp_dir = os.path.join(home_dir, "temp_dir")
-    if not input_folder:
-        messagebox.showwarning("No folder selected", "Please select a folder with Word files.")
+    if not input_folder or not output_folder or not output_file_name:
+        messagebox.showwarning("Missing Input", "Please select input/output folders and provide a file name.")
+        return
+      
+    combined_pdf_path = os.path.join(output_folder, output_file_name + ".pdf")
+    
+    if os.path.exists(combined_pdf_path):
+      overwrite = messagebox.askyesno(
+        "File exists",
+        f"The file '{output_file_name}.pdf' already exists in the ouput folder.\nDo you want to overwrite it?"
+      )
+      if not overwrite:
         return
       
     # Disable inputs while running
