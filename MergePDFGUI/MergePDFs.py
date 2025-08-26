@@ -84,7 +84,6 @@ def run_conversion(input_folder, output_folder):
     output_folder_var.set("")
     output_file_var.set("")
     
-    create_button.config(state="normal")
     input_button.config(state="normal")
     output_button.config(state="normal")
     filename_input.config(state="normal")
