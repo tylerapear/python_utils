@@ -1,5 +1,5 @@
 # Python Utils
 
-'''bash
+```bash
 testing 123
-'''
+```
