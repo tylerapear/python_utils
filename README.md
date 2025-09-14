@@ -6,10 +6,45 @@ A library of small, case-specific utilities using Python and Tkinter. Currently 
 
 _MergePDF and MergePDFGUI require Microsoft Word to be installed on the device_
 
+## Features
+- Merge multiple Word documents into a single PDF file
+- Simple Drag-and-Drop interface
+- Lightweight and Portable
+- No advanced setup required
+
 ## Usage Instructions
 
 ### Download and Use Tools
-To download and use any of these tools, go to the latest release and download either the .zip file or the .exe file for the tool that you want
+To download and use any of these tools, go to the [latest release](https://github.com/tylerapear/python_utils/releases/tag/v1.0.6) and download either the .zip file or the .exe file for the tool that you want. 
+
+#### How to use MergePDFGUI
+
+1) Launch the app
+
+Open the downloaded MergedPDFGUI application. You'll see the main interface:
+![Main window screenshot](assets/main_window.png)
+
+---
+
+2) Select Word documents
+
+Click the "Select Input Folder" to select the folder where your Word files are present.
+**Make sure your folder has only Word files!**
+![Folder selection screenshot](assets/folder_selection.jpg)
+
+---
+
+3) Choose output location
+
+Select where you want the merged PDF to be saved.
+![Output folder screenshot](assets/output_location.jpg)
+
+---
+
+4) Merge Files
+
+Click **Merge** to generate the combined PDF. You'll see a confirmation message once it's complete.
+![Merged success screenshot](assets/merge_success.png)
 
 ### Install Source Code
 To install the source code, follow these steps:
@@ -66,3 +101,12 @@ To install the source code, follow these steps:
     ```
 
 Then, you're all set!
+
+## Example Use Cases
+- Combine reports into one PDF for submission.
+- Merge multiple chapters into a single document.
+- Prepare meeting notes or assignments into a single file.
+
+## Contibuting
+Contributions are welcome!
+If you'd like to improve this project, please fork the repo and open a pull request.
